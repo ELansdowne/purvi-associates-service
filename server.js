@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const app = express();
 var cors = require('cors');
 const mongoose = require('mongoose');
@@ -16,24 +16,24 @@ app.use(cors());
 
 // body parser middleware
 app.use(bodyParser.urlencoded({
-  extended: false
+	extended: false
 }));
 app.use(bodyParser.json());
 
 //connection file
-var connection = require('./config/connection');
+// var connection = require('./config/connection'); 
 var mongoConnectionString = require('./config/mongo-connection');
 
 //check mongoose connection
 mongoose.connect(mongoConnectionString).then((result) =>{
-  console.log("mongoose connected succesfully")
+	console.log('mongoose connected succesfully', result);
 }).catch((error) => {
-  console.log(error)
-})
+	console.log(error);
+});
 
 
 //test route
-app.get('/', (req, res) => res.send("hello there !! purvi "));
+app.get('/', (req, res) => res.send('hello there !! purvi '));
 
 //main routes
 app.use('/api/test', test); /* testing test route with GET and POST with real mongoose update*/
