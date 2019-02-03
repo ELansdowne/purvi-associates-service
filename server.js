@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const login = require('./routes/api/login');
 const test = require('./routes/api/test');
 const signUp = require('./routes/api/sign-up');
+const item = require('./routes/api/item');
 
 //cors handling
 app.use(cors());
@@ -38,6 +39,7 @@ app.get('/', (req, res) => res.send("hello there !! purvi "));
 app.use('/api/test', test); /* testing test route with GET and POST with real mongoose update*/
 app.use('/api/login', login);
 app.use('/api/signUp', signUp);
+app.use('/api/items', item);
 
 
 //ports configuration
