@@ -1,0 +1,14 @@
+image: node:8.9.4
+options:
+  max-time: 10
+pipelines:
+  default:
+    - step:
+        name: Build and test
+        caches:
+          - node
+        script:
+          - npm install
+          - npm run lint
+          - npm run test
+          - npm run build
