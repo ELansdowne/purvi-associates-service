@@ -7,8 +7,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-// @route GET api/issues/test
-// @desc  tests issues route 
+// @route GET api/login/test
+// @desc  tests login route
 // @access public
 router.get('/test', (req, res) => {
     res.json({
@@ -17,31 +17,36 @@ router.get('/test', (req, res) => {
 })
 
 
-// @route GET api/issues
-// @desc  get list of issues
+// @route GET api/login
+// @desc  get user login
 // @access public  
 router.post('/', (req, res) => {
     let fetchedUser;
-    console.log(req.body);
     User.findOne({
         userName: req.body.userName
     }).then(user => {
         if (!user) {
             return res.status(401).json({
-                message: "Authorization failed user not found"
+                message: "User not Found"
             });
         }
-        fetchedUser=user;
+        fetchedUser = user;
         return bcrypt.compare(req.body.password, user.password);
     }).then(result => {
-        console.log("correct pass", result);
         if (!result) {
             return res.status(401).json({
-                message: "Authorization failed npot correct pass",
+                message: "Incorrect UserName Password",
             });
         }
-        const token = jwt.sign({userName: fetchedUser.userName, userId: fetchedUser._id}, 'checker string', {expiresIn: '1h'});
-        res.status(200).json({token: token});
+        const token = jwt.sign({
+            userName: fetchedUser.userName,
+            userId: fetchedUser._id
+        }, 'checker string', {
+            expiresIn: '1h'
+        });
+        res.status(200).json({
+            token: token
+        });
     }).catch(error => {
         return res.status(401).json({
             message: "Authorization failed",

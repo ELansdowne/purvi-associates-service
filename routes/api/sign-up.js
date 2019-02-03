@@ -3,24 +3,24 @@ const router = express.Router();
 var connection = require('../../config/connection');
 const User = require('../../models/user');
 const bcrypt = require('bcrypt');
+const auth = require('../../middleware/auth');
 
 // @route GET api/signup
 // @desc  get list of users
 // @access public
-router.get('/', (req, res) => {
- User.find().then((result) => {
-     console.log(result);
-     res.status(200).json({
-         message: "succesfull operation",
-         data:result
-     });
- })
+router.get('/', auth, (req, res) => {
+    User.find().then((result) => {
+        console.log(result);
+        res.status(200).json({
+            data: result
+        });
+    })
 })
 
 // @route POST api/signUp
 // @desc  signup user
 // @access public
-router.post('/', (req, res) => {
+router.post('/', auth, (req, res) => {
     bcrypt.hash(req.body.password, 10).then(hash => {
         const user = new User({
             userName: req.body.userName,
@@ -30,7 +30,6 @@ router.post('/', (req, res) => {
         user.save().then(result => {
             console.log(result);
             res.status(201).json({
-                message: "user signed up",
                 result: result
             });
         }).catch(error => {
